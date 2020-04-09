@@ -22,7 +22,7 @@ namespace Lmtsoft.Shopmall.Web
                  {
                      loggingBuilder.AddFilter("System", LogLevel.Warning);//过滤掉命名空间
                      loggingBuilder.AddFilter("Microsoft", LogLevel.Warning);
-                     loggingBuilder.AddLog4Net();//使用log4net 测试
+                     loggingBuilder.AddLog4Net();//使用log4net 测试2
                  })//扩展日志
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
