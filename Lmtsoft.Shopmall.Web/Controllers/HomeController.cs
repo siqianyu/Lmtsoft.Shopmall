@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Lmtsoft.Shopmall.Models;
+using Lmtsoft.Shopmall.Repository;
 using Lmtsoft.Shopmall.Service;
 using Lmtsoft.Shopmall.Interface;
 using Microsoft.Extensions.Configuration;
@@ -17,17 +17,17 @@ namespace Lmtsoft.Shopmall.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private IUserService _userService;
+        private IBaseManagerService _baseManagerService;
 
 
-        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, IUserService userService)
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, IBaseManagerService BaseManagerService)
         {
             _logger = logger;
-            _userService = userService;
+            _baseManagerService = BaseManagerService;
 
         }
 
-        public IActionResult QueryUser()
+        public IActionResult QueryBaseManager()
         {
 
             return View();
@@ -35,22 +35,22 @@ namespace Lmtsoft.Shopmall.Web.Controllers
 
         public IActionResult Index()
         {
-            User user = new User
+            BaseManager BaseManager = new BaseManager
             {
-                Name = "13336677383",
-                Mobile = "13336677383",
-                NickName = "达西先森"
+                UserName = "13336677383",
+                Telephone = "13336677383",
+                RealName = "达西先森"
             };
-            HttpContext.Session.Set<User>($"_{user.Name}", user);
+            HttpContext.Session.Set<BaseManager>($"_{BaseManager.UserName}", BaseManager);
             return View();
 
         }
 
         public IActionResult Privacy()
         {
-            string userName = "13336677383";
-            User user = HttpContext.Session.Get<User>($"_{userName}");
-            return new JsonResult(user);
+            string BaseManagerName = "13336677383";
+            BaseManager BaseManager = HttpContext.Session.Get<BaseManager>($"_{BaseManagerName}");
+            return new JsonResult(BaseManager);
 
         }
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Lmtsoft.Shopmall.Models
+namespace Lmtsoft.Shopmall.Repository
 {
     static class ConfigHelper
     {

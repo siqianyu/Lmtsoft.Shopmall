@@ -11,10 +11,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using Lmtsoft.Shopmall.Models;
+using Lmtsoft.Shopmall.Repository;
 using Lmtsoft.Shopmall.Interface;
 using Lmtsoft.Shopmall.Service;
-
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Lmtsoft.Shopmall.Web
 {
@@ -31,6 +32,25 @@ namespace Lmtsoft.Shopmall.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDistributedMemoryCache();
+            //ÅäÖÃauthorrize
+            services.AddAuthentication(b =>
+            {
+                b.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                b.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                b.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).
+            AddCookie(b =>
+            {
+                //µÇÂ½µØÖ·
+                b.LoginPath = "/login";
+                //sid
+                b.Cookie.Name = "Lmt_SessionId";
+                // b.Cookie.Domain = "shenniu.core.com";
+                b.Cookie.Path = "/";
+                b.Cookie.HttpOnly = true;
+                b.ExpireTimeSpan = TimeSpan.FromDays(14);
+            });
+
             services.AddSession(options =>
             {
                 // Set a short timeout for easy testing.
@@ -39,9 +59,13 @@ namespace Lmtsoft.Shopmall.Web
                 // Make the session cookie essential
                 options.Cookie.IsEssential = true;
             });
-            services.AddDbContext<ShopMallContext>();
-            services.AddTransient<IUserService, UserService>();
-            services.AddControllersWithViews();
+            services.AddDbContext<ShopmallContext>();
+            services.AddTransient<IBaseManagerService, BaseManagerService>();
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
+
 
         }
 

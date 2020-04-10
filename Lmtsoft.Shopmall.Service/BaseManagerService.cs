@@ -2,19 +2,19 @@
 using System.Linq;
 using System.Collections.Generic;
 using Lmtsoft.Shopmall.Interface;
-using Lmtsoft.Shopmall.Models;
+using Lmtsoft.Shopmall.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Lmtsoft.Shopmall.Service
 {
-    public class UserService : IUserService
+    public class BaseManagerService : IBaseManagerService
     {
-        private ShopMallContext _shopMallContext = new ShopMallContext();
+        private ShopmallContext _shopMallContext = new ShopmallContext();
 
-        public int Delete(User user)
+        public int Delete(BaseManager user)
         {
-            _shopMallContext.User.Remove(user);
+            _shopMallContext.BaseManager.Remove(user);
             return _shopMallContext.SaveChanges();
 
         }
@@ -22,22 +22,22 @@ namespace Lmtsoft.Shopmall.Service
         /// 保存
         /// </summary>
         /// <returns></returns>
-        public RspResult Save(User user)
+        public RspResult Save(BaseManager user)
         {
             if (user == null)
             {
                 return new RspResult() { Code = 200, Status = -1, Msg = "用户信息不能为空" };
             }
-            if (string.IsNullOrWhiteSpace(user.Name))
+            if (string.IsNullOrWhiteSpace(user.UserName))
             {
                 return new RspResult() { Code = 200, Status = -1, Msg = "用户名不能为空" };
             }
             //id=0为注册 id>0为修改无需判断 用户名
-            if (user.Id == 0 && Exsit(user.Name))
+            if (user.Id == 0 && Exsit(user.UserName))
             {
                 return new RspResult() { Code = 200, Status = -1, Msg = "用户名已存在" };
             }
-            _shopMallContext.User.Add(user);
+            _shopMallContext.BaseManager.Add(user);
             if (_shopMallContext.SaveChanges() > 0)
             {
                 return new RspResult() { Code = 200, Status = 1, Msg = "用户插入完成" };
@@ -52,7 +52,7 @@ namespace Lmtsoft.Shopmall.Service
         /// 登入
         /// </summary>
         /// <returns></returns>
-        public RspResult SignIn(User user)
+        public RspResult SignIn(BaseManager user)
         {
             throw new NotImplementedException();
         }
@@ -61,7 +61,7 @@ namespace Lmtsoft.Shopmall.Service
         /// 登出
         /// </summary>
         /// <returns></returns>
-        public RspResult SignOut(User user)
+        public RspResult SignOut(BaseManager user)
         {
             throw new NotImplementedException();
         }
@@ -70,18 +70,18 @@ namespace Lmtsoft.Shopmall.Service
         /// 查询
         /// </summary>
         /// <returns></returns>
-        public IEnumerable<User> Query()
+        public IEnumerable<BaseManager> Query()
         {
-            return _shopMallContext.User.Where(a => a.Id > 0);
+            return _shopMallContext.BaseManager.Where(a => a.Id > 0);
         }
         /// <summary>
         /// 精准查询
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public User QueryById(int id)
+        public BaseManager QueryById(int id)
         {
-            var users = _shopMallContext.User.Where(a => a.Id == id);
+            var users = _shopMallContext.BaseManager.Where(a => a.Id == id);
             if (users != null)
             {
                 return users.FirstOrDefault();
@@ -97,9 +97,9 @@ namespace Lmtsoft.Shopmall.Service
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public User QueryByName(string name)
+        public BaseManager QueryByName(string name)
         {
-            var users = _shopMallContext.User.Where(a => a.Name == name);
+            var users = _shopMallContext.BaseManager.Where(a => a.UserName == name);
             if (users != null)
             {
                 return users.FirstOrDefault();
@@ -115,16 +115,16 @@ namespace Lmtsoft.Shopmall.Service
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public IEnumerable<User> Search(User user)
+        public IEnumerable<BaseManager> Search(BaseManager user)
         {
-            var obj = _shopMallContext.User.Where(a => a.Id > 0);
-            if (!string.IsNullOrWhiteSpace(user.Name))
+            var obj = _shopMallContext.BaseManager.Where(a => a.Id > 0);
+            if (!string.IsNullOrWhiteSpace(user.UserName))
             {
-                obj = obj.Where(a => a.Name.Contains(user.Name));
+                obj = obj.Where(a => a.UserName.Contains(user.UserName));
             }
-            if (!string.IsNullOrWhiteSpace(user.NickName))
+            if (!string.IsNullOrWhiteSpace(user.RealName))
             {
-                obj = obj.Where(a => a.Name.Contains(user.NickName));
+                obj = obj.Where(a => a.RealName.Contains(user.RealName));
             }
             return obj;
         }

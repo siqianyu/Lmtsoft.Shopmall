@@ -1,6 +1,6 @@
 using System;
 
-namespace Lmtsoft.Shopmall.Models
+namespace Lmtsoft.Shopmall.Repository
 {
     public class ErrorViewModel
     {

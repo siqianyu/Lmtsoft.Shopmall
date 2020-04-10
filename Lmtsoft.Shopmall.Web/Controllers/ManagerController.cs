@@ -3,27 +3,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Lmtsoft.Shopmall.Interface;
-using Lmtsoft.Shopmall.Models;
+using Lmtsoft.Shopmall.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NETCore.Encrypt;
+using Lmtsoft.Shopmall.Common;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Lmtsoft.Shopmall.Web.Controllers
 {
-    public class UserController : Controller
+    public class ManagerController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-        private IUserService _userService;
+        private readonly ILogger<ManagerController> _logger;
+        private IBaseManagerService _managerService;
 
-        public UserController(ILogger<HomeController> logger, IUserService userService)
+        public ManagerController(ILogger<ManagerController> logger, IBaseManagerService managerService)
         {
             _logger = logger;
-            _userService = userService;
+            _managerService = managerService;
 
         }
         // GET: User
         public ActionResult Index()
         {
+            var manager = _managerService.Query();
+            ViewData.Model = manager;
             return View();
         }
 
@@ -40,7 +45,18 @@ namespace Lmtsoft.Shopmall.Web.Controllers
         }
 
         // GET: User/Create
+       
         public ActionResult Register()
+        {
+            return View();
+        }
+
+        /// <summary>
+        /// 登录
+        /// </summary>
+        /// <returns></returns>
+        
+        public ActionResult SignIn()
         {
             return View();
         }
@@ -48,25 +64,63 @@ namespace Lmtsoft.Shopmall.Web.Controllers
         // POST: User/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public ActionResult SignIn(IFormCollection collection)
+        {
+            try
+            {
+                string userName = collection["UserName"].ToString();
+                string password = collection["Password"].ToString();
+                if (!_managerService.Exsit(userName))
+                {
+                    return new JsonResult(new RspResult { Code = 100, Status = 1, Msg = "用户名不存在" });
+                }
+
+                BaseManager user = _managerService.QueryByName(userName);
+
+                string pwd = Utils.MD5(password);
+                if (!pwd.Equals(user.Password))
+                {
+                    return new JsonResult(new RspResult { Code = 100, Status = 1, Msg = "密码不正确" });
+                }
+                return new JsonResult(new RspResult { Code = 100, Status = 1, Msg = "登录成功" });
+                //return RedirectToAction(nameof(Index));
+            }
+            catch (Exception e)
+            {
+                return new JsonResult(new
+                {
+                    Message = e.Message
+                });
+            }
+        }
+
+        // POST: User/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+       
         public ActionResult Register(IFormCollection collection)
         {
             try
             {
-                string userName = collection["Name"].ToString();
+                string userName = collection["UserName"].ToString();
                 string password = collection["Password"].ToString();
-                if (_userService.Exsit(userName))
+                if (_managerService.Exsit(userName))
                 {
                     return new JsonResult(new RspResult { Code = 100, Status = 1, Msg = "用户名已存在" });
                 }
-                User user = new User
+
+                BaseManager user = new BaseManager
                 {
-                    Name = userName,
-                    Password = password
+                    UserName = userName,
+                    Password = password,
+                    DepartmentId = "35"
+
                 };
-                RspResult rsp = _userService.Save(user);
-                // TODO: Add insert logic here
+                user.Password = Utils.MD5(user.Password);
+
+                RspResult rsp = _managerService.Save(user);
+
                 return new JsonResult(rsp);
-                //return RedirectToAction(nameof(Index));
             }
             catch (Exception e)
             {

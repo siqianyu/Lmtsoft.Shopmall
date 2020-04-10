@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lmtsoft.Shopmall.Interface\Lmtsoft.Shopmall.Interface.csproj" />
-    <ProjectReference Include="..\Lmtsoft.Shopmall.Model\Lmtsoft.Shopmall.Models.csproj" />
+    <ProjectReference Include="..\Lmtsoft.Shopmall.Model\Lmtsoft.Shopmall.Repository.csproj" />
   </ItemGroup>
 
 </Project>

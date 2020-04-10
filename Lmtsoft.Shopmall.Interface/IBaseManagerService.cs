@@ -1,59 +1,59 @@
-﻿using Lmtsoft.Shopmall.Models;
+﻿using Lmtsoft.Shopmall.Repository;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Lmtsoft.Shopmall.Interface
 {
-    public interface IUserService
+    public interface IBaseManagerService
     {
         /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
-        IEnumerable<User> Query();
+        IEnumerable<BaseManager> Query();
         /// <summary>
         /// 
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        User QueryById(int id);
+        BaseManager QueryById(int id);
         /// <summary>
         /// 
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        User QueryByName(string name);
+        BaseManager QueryByName(string name);
 
         /// <summary>
         /// 模糊 查询
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        IEnumerable<User> Search(User user);
+        IEnumerable<BaseManager> Search(BaseManager user);
         /// <summary>
         /// 登入
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        RspResult SignIn(User user);
+        RspResult SignIn(BaseManager user);
         /// <summary>
         /// 登出
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        RspResult SignOut(User user);
+        RspResult SignOut(BaseManager user);
 
         /// <summary>
         /// 保存 修改
         /// </summary>
         /// <returns></returns>
-        RspResult Save(User user);
+        RspResult Save(BaseManager user);
         /// <summary>
         /// 删除
         /// </summary>
         /// <returns></returns>
-        int Delete(User user);
+        int Delete(BaseManager user);
         /// <summary>
         /// 用户名是否存在
         /// </summary>

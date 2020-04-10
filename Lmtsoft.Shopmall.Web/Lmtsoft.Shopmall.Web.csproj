@@ -14,13 +14,19 @@
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" Version="3.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
+    <PackageReference Include="NETCore.Encrypt" Version="2.0.8" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Lmtsoft.Shopmall.Common\Lmtsoft.Shopmall.Common.csproj" />
     <ProjectReference Include="..\Lmtsoft.Shopmall.Interface\Lmtsoft.Shopmall.Interface.csproj" />
-    <ProjectReference Include="..\Lmtsoft.Shopmall.Model\Lmtsoft.Shopmall.Models.csproj" />
+    <ProjectReference Include="..\Lmtsoft.Shopmall.Model\Lmtsoft.Shopmall.Repository.csproj" />
     <ProjectReference Include="..\Lmtsoft.Shopmall.Service\Lmtsoft.Shopmall.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
   </ItemGroup>
 
 </Project>

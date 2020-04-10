@@ -1,11 +1,11 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Lmtsoft.Shopmall.Model\Lmtsoft.Shopmall.Repository.csproj" />
+    <PackageReference Include="NETCore.Encrypt" Version="2.0.8" />
   </ItemGroup>
 
 </Project>
