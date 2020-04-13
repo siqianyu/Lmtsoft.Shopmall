@@ -16,6 +16,9 @@ using Lmtsoft.Shopmall.Interface;
 using Lmtsoft.Shopmall.Service;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Lmtsoft.Shopmall.Web
 {
@@ -32,24 +35,29 @@ namespace Lmtsoft.Shopmall.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDistributedMemoryCache();
-            //ÅäÖÃauthorrize
-            services.AddAuthentication(b =>
+            #region JWTÑéÖ¤ÅäÖÃauthorrize
+            var tokenSection = Configuration.GetSection("Security:Token");
+            services.AddAuthentication(option =>
             {
-                b.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                b.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                b.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                option.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).
-            AddCookie(b =>
+            AddCookie("Lmt_SessionId")
+            .AddJwtBearer(option =>
             {
-                //µÇÂ½µØÖ·
-                b.LoginPath = "/login";
-                //sid
-                b.Cookie.Name = "Lmt_SessionId";
-                // b.Cookie.Domain = "shenniu.core.com";
-                b.Cookie.Path = "/";
-                b.Cookie.HttpOnly = true;
-                b.ExpireTimeSpan = TimeSpan.FromDays(14);
+                option.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuer = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = tokenSection["Issuer"],
+                    ValidAudience = tokenSection["Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSection["Key"])),
+                    ClockSkew = TimeSpan.Zero
+                };
             });
+            #endregion
 
             services.AddSession(options =>
             {
@@ -89,6 +97,7 @@ namespace Lmtsoft.Shopmall.Web
             });
             app.UseRouting();
             app.UseSession();
+
 
             app.UseAuthorization();
 

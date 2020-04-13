@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Lmtsoft.Shopmall.Web.Controllers
 {
+    [Authorize]
     public class ManagerController : Controller
     {
         private readonly ILogger<ManagerController> _logger;
@@ -45,7 +46,7 @@ namespace Lmtsoft.Shopmall.Web.Controllers
         }
 
         // GET: User/Create
-       
+
         public ActionResult Register()
         {
             return View();
@@ -55,7 +56,7 @@ namespace Lmtsoft.Shopmall.Web.Controllers
         /// 登录
         /// </summary>
         /// <returns></returns>
-        
+
         public ActionResult SignIn()
         {
             return View();
@@ -97,7 +98,7 @@ namespace Lmtsoft.Shopmall.Web.Controllers
         // POST: User/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-       
+
         public ActionResult Register(IFormCollection collection)
         {
             try
