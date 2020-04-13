@@ -47,13 +47,13 @@ namespace Lmtsoft.Shopmall.Web
             {
                 option.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateAudience = true,
+                    ValidateAudience = true,//是否验证相应的项
                     ValidateLifetime = true,
                     ValidateIssuer = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = tokenSection["Issuer"],
-                    ValidAudience = tokenSection["Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSection["Key"])),
+                    ValidIssuer = tokenSection["Issuer"],//签发者
+                    ValidAudience = tokenSection["Audience"],//接收方
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSection["Key"])),//生成token需要的私钥
                     ClockSkew = TimeSpan.Zero
                 };
             });

@@ -49,10 +49,10 @@ namespace Lmtsoft.Shopmall.Web.Controllers
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenConfigSection["Key"]));
             var signCredential = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var jwtToken = new JwtSecurityToken(
-                issuer: tokenConfigSection["Issuer"],
-                audience: tokenConfigSection["Audience"],
+                issuer: tokenConfigSection["Issuer"],//签发者
+                audience: tokenConfigSection["Audience"],//接收方
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(Utils.ObjToInt(tokenConfigSection["Expires"], 3)),
+                expires: DateTime.Now.AddMinutes(Utils.ObjToInt(tokenConfigSection["Expires"], 3)),//过期时间
                 signingCredentials: signCredential
                 );
             return Ok(
